@@ -51,7 +51,7 @@ public class EmployeeDAO extends BaseDAO<Employee>{
 			if(rs.next()) {
 				emp.setEmpID(rs.getInt("EMP_ID"));
 				emp.setEmpPassword(rs.getString("EMP_PASSWORD"));
-				
+				emp.setEmpRole(rs.getString("EMP_ROLE"));
 				}
 		}
 		catch (SQLException e) {

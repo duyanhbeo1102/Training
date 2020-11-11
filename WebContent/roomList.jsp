@@ -47,6 +47,7 @@
                     <span class="text">Add Room</span>
                     
                   </button>
+                  <div><a href="${pageContext.request.contextPath}/jsonTraining" >Json</a></div>
                   </div>
                   <div style="width:40%;display: inline-block; vertical-align: right;">
                   <form action="roomList" method="post">

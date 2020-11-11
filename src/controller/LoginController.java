@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import DAL.EmployeeDAO;
 import model.Employee;
@@ -30,7 +31,7 @@ public class LoginController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.sendRedirect("login.jsp");
+		request.getRequestDispatcher("login.jsp").forward(request, response);
 	}
 
 	/**
@@ -39,20 +40,28 @@ public class LoginController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int id = Integer.parseInt(request.getParameter("id"));
 		String password = request.getParameter("password");
-		System.out.println(id);
-		System.out.println(password);
-		boolean status = false;
+		System.out.println(id+"001"+password);
 		EmployeeDAO empDAO = new EmployeeDAO();
-		Employee emp = empDAO.getEmpAccount(id, password);
-		if(emp!= null && emp.getEmpID() ==id) {
-				status= true;
+		try {
+			String destPage = "login.jsp";
+			Employee emp = empDAO.getEmpAccount(id, password);
+			System.out.println(id+"002"+password);
+			if(emp!= null) {
+				HttpSession session = request.getSession();
+	            session.setAttribute("user", emp);
+	            destPage = "roomList";
+			}
+			else {
+                String message = "Invalid email/password";
+                request.setAttribute("message", message);
+                System.out.println(message);
+            }
+			request.getRequestDispatcher(destPage).forward(request, response);
 		}
-		if(status) {
-			response.sendRedirect(request.getContextPath()+"/roomList");
+		catch (Exception e) {
+			// TODO: handle exception
 		}
-		else {
-			response.sendRedirect(request.getContextPath()+"/login");
-		}
+		
 	}
 
 }
